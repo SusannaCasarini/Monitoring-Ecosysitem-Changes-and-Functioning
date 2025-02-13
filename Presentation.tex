@@ -1,6 +1,7 @@
 \documentclass{beamer}
 \usetheme{Dresden}
-\usecolortheme{beaver}
+\usecolortheme{dolphin}
+\usepackage{hyperref}
 
 \title{Spatiotemporal analysis of Lake Manchar}
 \subtitle{Using Landsat 8 and 9 satellite images}
@@ -13,7 +14,6 @@
 \begin{frame}
   \titlepage
   \centering
-  \usepackage{hyperref}
   \href{https://github.com/SusannaCasarini}{https://github.com/SusannaCasarini}  
 
 \end{frame}
@@ -24,9 +24,11 @@
   
   \begin{itemize}
       \item \small Lake Manchar is the largest lake in Pakistan.
-      \item \small The images from the Landsat 8 and Landsat 9 satellites were obtained both from the USGS and NASA's Earth Observatory.
+      \item \small Images obtained from the Landsat 8 and Landsat 9 satellites.
       \item \small In the summer of 2022, the lake overflowed, causing severe damage.
   \end{itemize}
+
+    \hspace{1cm}
   
   \begin{minipage}{0.48\textwidth}
     \centering
@@ -38,37 +40,62 @@
     \centering
     \includegraphics[width=0.6\linewidth]{0.png}
   \end{minipage}
+  
  \end{frame}  
+ 
+\begin{frame}
+    \small Analysis:
+    \begin{itemize}
+        \item \small \textbf{First analysis}: Analysis of Lake Manchar in September from 2021 to 2024 - Source USGS - \href{https://earthexplorer.usgs.gov/}{https://earthexplorer.usgs.gov/}
+        \item \small \textbf{Second analysis}: Analysis of Lake Manchar seasonality before and after the flood - Source USGS - \href{https://earthexplorer.usgs.gov/}{https://earthexplorer.usgs.gov/}
+        \item \small \textbf{Third analysis}: Analysis of Lake Manchar NASA images before and after the flood - Source NASA Earth Observatory - \href{https://earthobservatory.nasa.gov/images/150306/lake-manchar-is-overflowing}{https://earthobservatory.nasa.gov/images/150306/lake-manchar-is-overflowing}
+    \end{itemize}
+\end{frame}
 
 \section{First analysis}
 
 \begin{frame}
   \frametitle{\small Analysis of Lake Manchar in September from 2021 to 2024} 
-    \small First analysis:
+  \small \textbf{First analysis}:
     \begin{itemize}
         \item \small Temporal analysis of September from 2021 to 2024.
         \item \small Use of bands B2, B3, B4, and B5.
         \item \small Landsat 8 and 9 satellite.
         \item \small The images have been cropped and enhanced for better distinguishability.
     \end{itemize}
+ 
+\end{frame}
 
-    \begin{figure}
+\begin{frame}
+        \begin{figure}
         \centering
         \includegraphics[width=0.5\linewidth]{1.png}
         \label{fig:enter-label}
+        \caption{Natural color - Manchar Lake September 2021}
     \end{figure}
-  
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.9\linewidth]{Extent.png}
+        \label{fig:enter-label}
+    \end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{Natural.png}
+    \label{fig:enter-label}
+\end{figure}
+    
 \end{frame}
 
 \begin{frame}
   \frametitle{\small Analysis of Lake Manchar in September from 2021 to 2024} 
     \centering
-    \small Natural color images, using bands B2, B3, and B4.
     
     \begin{figure}
-        \centering
-        \includegraphics[width=0.5\linewidth]{2.png}
+        \includegraphics[width=0.4\linewidth]{2.png}
         \label{fig:enter-label}
+        \caption{Natural color images, using bands B2, B3, and B4}
     \end{figure}
   
 \end{frame}
@@ -76,12 +103,11 @@
 \begin{frame}
   \frametitle{\small Analysis of Lake Manchar in September from 2021 to 2024} 
 
-    \centering
-    \small False color images, using red for infrared (NIR).
     \begin{figure}
         \centering
-        \includegraphics[width=0.5\linewidth]{3.png}
+        \includegraphics[width=0.4\linewidth]{3.png}
         \label{fig:enter-label}
+        \caption{False color images, using red for infrared (NIR)}
     \end{figure}
   
 \end{frame}
@@ -102,15 +128,11 @@
 \begin{frame}
   \frametitle{\small Analysis of Lake Manchar in September from 2021 to 2024} 
 
-    \begin{itemize}
-        \item \small Years correlation
-        \item \small Low correlation of 2022
-    \end{itemize}
-
     \begin{figure}
         \centering
         \includegraphics[width=0.6\linewidth]{5.png}
         \label{fig:enter-label}
+        \caption{Years B5 correlation - Low correlation for 2022}
     \end{figure}
   
 \end{frame}
@@ -118,22 +140,19 @@
 \begin{frame}
   \frametitle{\small Analysis of Lake Manchar in September from 2021 to 2024} 
 
-    \centering
-    \small Water difference through years \\
-    
    \begin{minipage}{0.48\textwidth}
     \centering
     \includegraphics[width=0.95\linewidth]{6.png}
+    \caption{Water difference 2022-2023}
   \end{minipage}
   \hfill
   \begin{minipage}{0.48\textwidth}
     \centering
     \includegraphics[width=0.85\linewidth]{7.png}
+    \caption{RGB in years 2021-2023}
   \end{minipage}
   
 \end{frame}  
-
-  
 
 \begin{frame}
   \frametitle{\small Analysis of Lake Manchar in September from 2021 to 2024} 
@@ -141,12 +160,18 @@
     \begin{itemize}
         \item \small Classification with im.classify
         \item \small Three classes: water, vegetation, desert
-        \item \small Classification images of 2021 and 2022
     \end{itemize}
     
     \begin{figure}
         \centering
-        \includegraphics[width=0.9\linewidth]{8.png}
+        \includegraphics[width=0.6\linewidth]{8.png}
+        \label{fig:enter-label}
+        \caption{Classification of 2021 (left) and 2022 (right)}
+    \end{figure}
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\linewidth]{classification.png}
         \label{fig:enter-label}
     \end{figure}
   
@@ -155,11 +180,8 @@
 \begin{frame}
   \frametitle{\small Analysis of Lake Manchar in September from 2021 to 2024} 
 
-  \centering
-  \small Water percentage in classification each year
-
-  \begin{columns}  % Inizia l'ambiente columns per affiancare gli oggetti
-    \begin{column}{0.45\textwidth}  % Prima colonna per la tabella
+  \begin{columns} 
+    \begin{column}{0.45\textwidth}  
       \centering
       \begin{tabular}{|c|c|}
       \hline
@@ -178,25 +200,32 @@
       \end{tabular}
     \end{column}
 
-    \begin{column}{0.45\textwidth}  % Seconda colonna per l'immagine
+    \begin{column}{0.45\textwidth}  
       \centering
       \includegraphics[width=\linewidth]{10.png}
       \label{fig:enter-label}
     \end{column}
-  \end{columns}  % Fine dell'ambiente columns
+  \end{columns}  
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{ClassificationPerc.png}
+    \label{fig:enter-label}
+\end{figure}
 
 \end{frame}
-
 
 \begin{frame}
   \frametitle{\small Analysis of Lake Manchar in September from 2021 to 2024} 
 
     \centering
-    \small NDVI formula (?)
+    \small \begin{equation}
+NDVI = \frac{NIR - RED}{NIR + RED}
+\end{equation}
     
         \begin{figure}
         \centering
-        \includegraphics[width=0.9\linewidth]{11.png}
+        \includegraphics[width=0.8\linewidth]{11.png}
         \caption{NDVI index in 2021 (left) and 2022 (right)}
         \label{fig:enter-label}
     \end{figure}
@@ -206,7 +235,7 @@
 \begin{frame}
   \frametitle{\small Analysis of Lake Manchar in September from 2021 to 2024} 
 
-    \small Conclusions of the first analysis:
+    \small \textbf{Conclusions of the first analysis}:
     \begin{itemize}
         \item \small Comparing the satellite images of the lake from 2021 to 2024, a clear difference in the amount of water present in the images after the flood can be observed.
         \item \small The infrared band allowed for better distinction between vegetation areas and lake areas.
@@ -220,29 +249,34 @@
 \begin{frame}
   \frametitle{\small Analysis of Lake Manchar seasonality before and after the flood} 
 
-  \small Second analysis:
+  \small \textbf{Second analysis}:
   \begin{itemize}
       \item \small Comparison of the images in the 4 seasons of the year preceding the flood and the year of the flood.
       \item \small Classification and comparison of the percentages of water, vegetation, and desert in the different seasons.
       \item \small NIR band.
   \end{itemize}
-  \begin{figure}
-      \centering
-      \includegraphics[width=0.7\linewidth]{12.png}
-      \label{fig:enter-label}
-  \end{figure}
   
 \end{frame}
 
 \begin{frame}
-  \frametitle{\small Analysis of Lake Manchar seasonality before and after the flood} 
 
-  \centering\small Clustering and comparison between cluster percentage
+  \begin{figure}
+      \centering
+      \includegraphics[width=\linewidth]{12.png}
+      \label{fig:enter-label}
+      \caption{NIR band for each season - September 2021 - June 2023}
+  \end{figure}    
+  
+\end{frame}
+    
+\begin{frame}
+  \frametitle{\small Analysis of Lake Manchar seasonality before and after the flood} 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\linewidth]{13.png}
+    \includegraphics[width=0.8\linewidth]{13.png}
     \label{fig:enter-label}
+    \caption{Clustering and comparison between cluster percentages}
 \end{figure}
   
 \end{frame}
@@ -250,7 +284,7 @@
 \begin{frame}
       \frametitle{\small Analysis of Lake Manchar seasonality before and after the flood} 
 
-    \small Conclusions of the second analysis:
+    \small \textbf{Conclusions of the second analysis}:
     \begin{itemize}
         \item \small The seasonal differences are not as significant compared to the consequences of the flood. 
         \item \small In the winter following the flood, the amount of water is higher than usual. 
@@ -263,31 +297,45 @@
 \begin{frame}
   \frametitle{\small Analysis of Lake Manchar NASA images before and after the flood} 
   
-    \small Third analysis:
+    \small \textbf{Third analysis}:
     \begin{itemize}
         \item \small Use of NASA Landsat 8 and 9 images with bands B2, B3, B4 of June 2022 and September 2022.
         \item \small PCA analysis of June and September: PC1 variability and differences.
-        \item \small Modified NDVI.
         \item \small Density analysis.
-    \end{itemize}
+    \end{itemize}  
+\end{frame}
+
+\begin{frame}
+    \begin{figure}
+        \centering
+        \includegraphics[width=\linewidth]{14.png}
+        \label{fig:enter-label}
+        \caption{Lake Manchar - June 2022 and September 2022 - NASA source}
+    \end{figure}    
+\end{frame}
+
+\begin{frame}
+\small\centering Code to perform PCA and study variability of PC1
+        \begin{figure}
+        \centering
+        \includegraphics[width=0.3\linewidth]{PCA.png}
+        \label{fig:enter-label}
+    \end{figure}
 
     \begin{figure}
         \centering
-        \includegraphics[width=0.5\linewidth]{14.png}
+        \includegraphics[width=0.5\linewidth]{pc1sd.png}
         \label{fig:enter-label}
     \end{figure}
-  
 \end{frame}
 
 \begin{frame}
   \frametitle{\small Analysis of Lake Manchar NASA images before and after the flood} 
 
-    \centering\small Principal Component Analysis of September 2022
-
     \begin{figure}
         \centering
-        \includegraphics[width=0.5\linewidth]{16.png}
-        \caption{First principal component}
+        \includegraphics[width=0.6\linewidth]{16.png}
+        \caption{First principal component of September 2022}
         \label{fig:enter-label}
     \end{figure}
 
@@ -296,12 +344,11 @@
 \begin{frame}
   \frametitle{\small Analysis of Lake Manchar NASA images before and after the flood} 
 
-    \centering\small Variability of September
-  
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\linewidth]{18.png}
+    \includegraphics[width=0.6\linewidth]{18.png}
     \label{fig:enter-label}
+    \caption{September variability of the first component}
 \end{figure}
   
 
@@ -310,16 +357,16 @@
 \begin{frame}
   \frametitle{\small Analysis of Lake Manchar NASA images before and after the flood} 
 
-  \centering\small June first PC and PC difference between september
-
    \begin{minipage}{0.48\textwidth}
     \centering
     \includegraphics[width=\linewidth]{19.png}
+    \caption{June PC1}
   \end{minipage}
   \hfill
   \begin{minipage}{0.48\textwidth}
     \centering
     \includegraphics[width=\linewidth]{20.png}
+    \caption{September/June differences}
   \end{minipage}
 
 
@@ -328,25 +375,11 @@
 \begin{frame}
   \frametitle{\small Analysis of Lake Manchar NASA images before and after the flood} 
 
-\centering  \small Blue, Green and Red band differences between september and June
-
   \begin{figure}
       \centering
       \includegraphics[width=0.9\linewidth]{22.png}
       \label{fig:enter-label}
-  \end{figure}
-
-\end{frame}
-
-\begin{frame}
-  \frametitle{\small Analysis of Lake Manchar NASA images before and after the flood} 
-
-    \centering\small NDVI in June (left), September (centre) and NDVI difference (right).
-
-  \begin{figure}
-      \centering
-      \includegraphics[width=0.9\linewidth]{23.png}
-      \label{fig:enter-label}
+      \caption{B2, B3 and B4 band differences between September and June}
   \end{figure}
 
 \end{frame}
@@ -377,6 +410,11 @@
     \includegraphics[width=\linewidth]{26.png}
     \caption{}
   \end{minipage}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{density.png}
+    \label{fig:enter-label}
+\end{figure}
 
 \end{frame}
 
@@ -384,7 +422,7 @@
 \begin{frame}
   \frametitle{\small Conclusions}
   
-    \small Conclusions:
+    \small \textbf{Conclusions}:
     \begin{itemize}
         \item \small The amount of water in the months following the flood is much higher compared to the quantities in previous years. 
         \item \small Seasonality usually does not significantly affect the amount of water and vegetation, compared to the increase in water caused by the flood. 
@@ -392,6 +430,10 @@
         \item \small The NIR band proved useful for distinguishing water and vegetation, but it was also possible to perform an accurate classification and study the images using bands B2, B3, and B4.
     \end{itemize}
   
+\end{frame}
+
+\begin{frame}
+ \centering\huge Thank you!    
 \end{frame}
 
 \end{document}
