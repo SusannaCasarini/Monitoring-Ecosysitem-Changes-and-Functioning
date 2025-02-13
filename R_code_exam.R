@@ -1,3 +1,4 @@
+
 ######################
 #### Lake Manchar ####
 ######################
@@ -78,18 +79,15 @@ landsat_rgb_2024 <- c(b4_2024, b3_2024, b2_2024)
 
 # RGB plot: natural color image
 # stretch to have better contrasts: normalizing pixels
-par(mfrow=c(4,2))
+par(mfrow=c(1,2))
 plotRGB(landsat_rgb_2021, r=1, g=2, b=3, stretch="lin")
 plotRGB(landsat_rgb_2021, r=1, g=2, b=3)
 
+par(mfrow=c(2,2))
+plotRGB(landsat_rgb_2021, r=1, g=2, b=3, stretch="lin")
 plotRGB(landsat_rgb_2022, r=1, g=2, b=3, stretch="lin") 
-plotRGB(landsat_rgb_2022, r=1, g=2, b=3) 
-
 plotRGB(landsat_rgb_2023, r=1, g=2, b=3, stretch="lin") 
-plotRGB(landsat_rgb_2023, r=1, g=2, b=3) 
-
 plotRGB(landsat_rgb_2024, r=1, g=2, b=3, stretch="lin") 
-plotRGB(landsat_rgb_2024, r=1, g=2, b=3) 
 
 ### 3 - FALSE COLOR PLOT ###
 
@@ -138,7 +136,7 @@ im.plotRGB(water, r=1, g=3, b=2)
 
 # Classification to detect water using b5
 # 1 - water, 2 - desert, 3 - vegetation
-par(mfrow=c(1,1))
+par(mfrow=c(1,2))
 set.seed(1234)
 b5_class_2021 <- im.classify(b5_2021, 3)
 set.seed(1234)
@@ -191,7 +189,7 @@ ggplot(results, aes(x=year, y=perc_water)) +
   geom_bar(stat="identity",fill="skyblue") + 
   scale_x_discrete(limits = year) +
   xlab("Year") + ylab("Water percentage") + 
-  ggtitle("Pixel percentage of water in september - Lake Manchar")
+  ggtitle("Percentage of water in september - Lake Manchar")
 
 ### 7 - NDVI ###
 
@@ -299,16 +297,16 @@ for (name in names(class_images)) {
 percentage_df <- as.data.frame(do.call(rbind, percentage_list))
 colnames(percentage_df) <- c("Image", "Water", "Desert", "Vegetation")
 percentage_df[, 2:4] <- lapply(percentage_df[, 2:4], as.numeric)
-percentage_df <- percentage_df[,-1]
 
 # Bar plot of the clusters percentage
-season <- Seasons$Image
+season <- percentage_df$Image
 perc_long <- data.frame(
   season = rep(season, 3),  
   percentage = c(percentage_df$Water, percentage_df$Desert, percentage_df$Vegetation),
   category = rep(c("Water", "Desert", "Vegetation"), each = length(season))
 )
 
+par(mfrow=c(1,1))
 ggplot(perc_long, aes(x=season, y=percentage, fill=category)) +
   geom_bar(stat="identity", position="dodge") + 
   scale_x_discrete(limits = season) +
@@ -327,16 +325,16 @@ ggplot(perc_long, aes(x=season, y=percentage, fill=category)) +
 
 ### 1 - NASA IMAGE IMPORT ###
 
-par(mfrow=c(1,1))
+par(mfrow=c(1,2))
 sept_2022_NASA <- rast("JuneSept2022NASA/manchar_oli_2022248_lrg.jpg")
 june_2022_NASA <- rast("JuneSept2022NASA/manchar_oli2_2022176_lrg.jpg")
 plotRGB(june_2022_NASA, r = 1, g = 2, b = 3)
 plotRGB(sept_2022_NASA, r = 1, g = 2, b = 3)
-# Non ho la banda infrared
 
 ### 2 - PCA ###
 
 # Perform PCA
+par(mfrow=c(1,1))
 pc <-  im.pca(sept_2022_NASA)
 pc1 <- pc[[1]]
 plot(pc1, col=cl_vir)
@@ -345,11 +343,14 @@ title('pc1 september')
 ### 3 - VARIABILITY ###
 
 # sd on pc1
+par(mfrow=c(1,2))
 pc1sd3 <- focal(pc1, matrix(1/9,3,3), fun=sd) # 3x3 moving window
 plot(pc1sd3, col=cl_vir)
+title('pc1 standard deviation 3x3')
 
 pc1sd7 <- focal(pc1, matrix(1/49, 7, 7), fun=sd) # 7x7 moving window -> smoother
 plot(pc1sd7, col=cl_vir)
+title('pc1 standard deviation 7x7')
 
 # sd on B3 in september
 # B3 is the best no analyse green waters like Manchar lake
@@ -371,6 +372,7 @@ plot(sdstack, col=cl_vir)
 # Compute PCA for june
 pc_june <-  im.pca(june_2022_NASA)
 pc1_june <- pc_june[[1]]
+par(mfrow=c(1,1))
 plot(pc1_june, col=cl_vir)
 title('pc1 june')
 
@@ -383,6 +385,7 @@ plot(pca_diff,
 # PC difference variability
 std_dev_pca_diff <- focal(pca_diff, w = matrix(1, 3, 3), fun = sd)
 plot(std_dev_pca_diff, col=cl_vir)
+title('variability difference')
 
 ### 5 - BANDS DIFFERENCES ###
 
@@ -406,10 +409,13 @@ plot(diff_B4,
 # NDVI modified
 ndvi_mod_june <- (june_2022_NASA[[2]]-june_2022_NASA[[3]])/(june_2022_NASA[[2]]+june_2022_NASA[[3]])
 plot(ndvi_mod_june, col=cl_vir)
+title('June NDVI')
 ndvi_mod_sept <- (sept_2022_NASA[[2]]-sept_2022_NASA[[3]])/(sept_2022_NASA[[2]]+sept_2022_NASA[[3]])
 plot(ndvi_mod_sept,col=cl_vir)
+title('Septenber NDVI')
 diff_ndvi_mod <- ndvi_mod_sept - ndvi_mod_june
 plot(diff_ndvi_mod, col=cl_vir)
+title('NDVI difference')
 
 ### 7 - TEMPORAL DIFFERENCE ###
 
@@ -417,6 +423,7 @@ plot(diff_ndvi_mod, col=cl_vir)
 par(mfrow=c(1,1))
 diff <- june_2022_NASA[[1]] - sept_2022_NASA[[1]]
 plot(diff, col=cl_vir) 
+title('Temporal difference')
 # the majour differences are in the part with extra water
 
 ### 6 - DENSITY ###
