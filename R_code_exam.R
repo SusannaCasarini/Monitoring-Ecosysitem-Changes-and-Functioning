@@ -9,12 +9,17 @@ library(viridis)
 library(raster)
 setwd("C:/Suz/Università/Data science/Monitoring Ecosysitems Changing and Functioning/Esame")
 
-# https://www.nature.com/articles/s41598-024-76730-1 -> articolo su cui trarre spunto
-# https://earthobservatory.nasa.gov/images/150306/lake-manchar-is-overflowing
+################
+## ANALYSIS 1 ##
+################
+##               Temporal analysis of september images from 2021 to 2024
+##               B2, B3, B4 and NIR bands
+##               to study differences due to the 2022 flood
+##               Methods: different colors plots, correlation, differences,
+##               classification, clusters percentages, NDVI
 
-#################################
-######### Import data ###########
-#################################
+
+### 1 - IMPORT DATA ###
 
 # Importing data: 18/09/2021
 extent_crop <- ext(277785+50000, 508215-100000, 2757585+128000, 2992215-20000) 
@@ -69,12 +74,10 @@ b2_2024 <- crop(b2_2024, extent_crop)
 
 landsat_rgb_2024 <- c(b4_2024, b3_2024, b2_2024)
 
-#################################
-######### Natural plot ##########
-#################################
+### 2 - NATURAL PLOT ###
 
 # RGB plot: natural color image
-# stretch per migliorare i contrasti: normalizza i pixel nelle bande
+# stretch to have better contrasts: normalizing pixels
 par(mfrow=c(4,2))
 plotRGB(landsat_rgb_2021, r=1, g=2, b=3, stretch="lin")
 plotRGB(landsat_rgb_2021, r=1, g=2, b=3)
@@ -88,10 +91,9 @@ plotRGB(landsat_rgb_2023, r=1, g=2, b=3)
 plotRGB(landsat_rgb_2024, r=1, g=2, b=3, stretch="lin") 
 plotRGB(landsat_rgb_2024, r=1, g=2, b=3) 
 
-#################################
-####### False color plot ########
-#################################
-# red -> NIR = vegetazione
+### 3 - FALSE COLOR PLOT ###
+
+# red -> NIR 
 # green -> band green 
 # blue -> band blue
 
@@ -106,9 +108,7 @@ plotRGB(false2022, r=1, g=2, b=3, stretch="lin")
 plotRGB(false2023, r=1, g=2, b=3, stretch="lin")
 plotRGB(false2024, r=1, g=2, b=3, stretch="lin")
 
-#################################
-######### Infrared plot #########
-#################################
+### 4 - INFRARED PLOT ###
 
 # Analysing b5 plots - infrared
 # We use b5 because it is thebest method to analyse water and to compute NDVI
@@ -119,6 +119,8 @@ plot(water[[1]], col=cl_vir, main='2021')
 plot(water[[2]], col=cl_vir, main= '2022')
 plot(water[[3]], col=cl_vir, main= '2023')
 plot(water[[4]], col=cl_vir, main= '2024')
+
+### 5 - CORRELATIONS AND DIFFERENCES ###
 
 # Correlation though years
 pairs(water) # 2022 is less correlated with other years
@@ -132,27 +134,19 @@ title('Water difference (2022-2023)')
 #Plotting an RGB with 2021 in the red channel, 2022 in the green channel, and 2023 in the blue channel
 im.plotRGB(water, r=1, g=3, b=2)
 
-#################################
-####### Classification ##########
-#################################
+### 6 - CLASSIFICATION ###
 
-# Classification to detect water using b5 infrared and b2
+# Classification to detect water using b5
+# 1 - water, 2 - desert, 3 - vegetation
 par(mfrow=c(1,1))
 set.seed(1234)
 b5_class_2021 <- im.classify(b5_2021, 3)
-# 1 - water, 2 - desert, 3 - vegetation
-
 set.seed(1234)
 b5_class_2022 <- im.classify(b5_2022, 3)
-# 1 - water, 2 - desert, 3 - vegetation
-
 set.seed(1234)
 b5_class_2023 <- im.classify(b5_2023, 3)
-# 1 - water, 2 - desert, 3 - vegetation
-
 set.seed(1234)
 b5_class_2024 <- im.classify(b5_2024, 3)
-# 1 - water, 2 - desert, 3 - vegetation
 
 f2021 <- freq(b5_class_2021)
 tot2021 <- ncell(b5_class_2021)
@@ -199,44 +193,156 @@ ggplot(results, aes(x=year, y=perc_water)) +
   xlab("Year") + ylab("Water percentage") + 
   ggtitle("Pixel percentage of water in september - Lake Manchar")
 
+### 7 - NDVI ###
+
 # NDVI
 # DVI
 par(mfrow=c(1,2))
 dvi_2021 <- b5_2021 - b4_2021
-#plot(dvi_2021, col=viridisc)
 dvi_2022 <- b5_2022 - b4_2022
-#plot(dvi_2022, col=viridisc)
 
 # NDVI
 # between -1 and 1 -> good vegetation
-# 1: vegetali in buona salute
-# 0: terreni aridi
-# -1: non vegetali come acqua o neve
+# 1: healthy veg
+# 0: aridity
+# -1: water or snow, non veg
 ndvi_2021 = dvi_2021 / (b5_2021 + b4_2021)
 ndvi_2022 = dvi_2022 / (b5_2022 + b4_2022)
 plot(ndvi_2021, col=cl_vir)
 plot(ndvi_2022, col=cl_vir)
-#plot(ndvi_2021)
-#plot(ndvi_2022)
 
+################
+## ANALYSIS 2 ##
+################
+##               Temporal analysis of seasons images from autumn 2021 to summer 2023
+##               NIR band, to study seasonal differences between and after the 2022 flood
+##               Methods: classification, cluster percentage comparations
 
-###########################
-##### NASA image ##########
-###########################
+### 1 - IMPORT DATA ###
+
+# Import B5 raster images
+autumn_2021 <- rast("SeasonsB5/LC08_L2SP_152042_20210918_20210925_02_T1_SR_B5.TIF")
+autumn_2021 <- crop(autumn_2021,extent_crop)
+winter_2021 <- rast("SeasonsB5/LC09_L2SP_152042_20211215_20230504_02_T1_SR_B5.TIF") 
+winter_2021 <- crop(winter_2021,extent_crop)
+spring_2022 <- rast("SeasonsB5/LC09_L2SP_152042_20220321_20230424_02_T1_SR_B5.TIF")
+spring_2022 <- crop(spring_2022,extent_crop)
+summer_2022 <- rast("SeasonsB5/LC09_L2SP_152042_20220625_20230409_02_T1_SR_B5.TIF")
+summer_2022 <- crop(summer_2022,extent_crop)
+autumn_2022 <- rast("SeasonsB5/LC09_L2SP_152042_20220913_20230329_02_T1_SR_B5.TIF")
+autumn_2022 <- crop(autumn_2022,extent_crop)
+winter_2022 <- rast("SeasonsB5/LC08_L2SP_152042_20221226_20230103_02_T1_SR_B5.TIF")
+winter_2022 <- crop(winter_2022,extent_crop)
+spring_2023 <- rast("SeasonsB5/LC09_L2SP_152042_20230324_20230326_02_T1_SR_B5.TIF")
+spring_2023 <- crop(spring_2023,extent_crop)
+summer_2023 <- rast("SeasonsB5/LC09_L2SP_152042_20230612_20230614_02_T1_SR_B5.TIF")
+summer_2023 <- crop(summer_2023,extent_crop)
+
+# plotting seasons
+par(mfrow=c(2,4))
+plot(autumn_2021,col=cl_vir, main="Autumn 2021")
+plot(winter_2021,col=cl_vir, main="Winter 2021")
+plot(spring_2022,col=cl_vir, main="Spring 2022")
+plot(summer_2022,col=cl_vir, main="Summer 2022")
+plot(autumn_2022,col=cl_vir, main="Autumn 2022")
+plot(winter_2022,col=cl_vir, main="Winter 2022")
+plot(spring_2023,col=cl_vir, main="Spring 2023")
+plot(summer_2023,col=cl_vir, main="Summer 2023")
+
+### 2 - CLASSIFICATION ###
+
+# 1 - water, 2- desert, 3 - vegetation
+
+par(mfrow=c(2,2))
+set.seed(1234)
+class_autumn_2021 <- im.classify(autumn_2021,3)
+set.seed(1234)
+class_winter_2021 <- im.classify(winter_2021,3)
+set.seed(1234)
+class_spring_2022 <- im.classify(spring_2022,3)
+set.seed(1235)
+class_summer_2022 <- im.classify(summer_2022,3)
+set.seed(1234)
+class_autumn_2022 <- im.classify(autumn_2022,3)
+set.seed(1236)
+class_winter_2022 <- im.classify(winter_2022,3)
+set.seed(3667889)
+class_spring_2023 <- im.classify(spring_2023,3)
+set.seed(1234)
+class_summer_2023 <- im.classify(summer_2023,3)
+
+### 3 - PERCENTAGE ANALYSIS ###
+
+# Pixel frequency for each cluster
+class_images <- list(
+  Autumn_2021 = class_autumn_2021,
+  Winter_2021 = class_winter_2021,
+  Spring_2022 = class_spring_2022,
+  Summer_2022 = class_summer_2022,
+  Autumn_2022 = class_autumn_2022,
+  Winter_2022 = class_winter_2022,
+  Spring_2023 = class_spring_2023,
+  Summer_2023 = class_summer_2023
+)
+
+percentage_list <- list()
+
+for (name in names(class_images)) {
+  class_img <- class_images[[name]]
+  f <- freq(class_img)
+  tot <- ncell(class_img)
+  p <- f * 100 / tot 
+  p_values <- p[, 3]  
+  percentage_list[[name]] <- c(name, p_values)
+}
+
+percentage_df <- as.data.frame(do.call(rbind, percentage_list))
+colnames(percentage_df) <- c("Image", "Water", "Desert", "Vegetation")
+percentage_df[, 2:4] <- lapply(percentage_df[, 2:4], as.numeric)
+percentage_df <- percentage_df[,-1]
+
+# Bar plot of the clusters percentage
+season <- Seasons$Image
+perc_long <- data.frame(
+  season = rep(season, 3),  
+  percentage = c(percentage_df$Water, percentage_df$Desert, percentage_df$Vegetation),
+  category = rep(c("Water", "Desert", "Vegetation"), each = length(season))
+)
+
+ggplot(perc_long, aes(x=season, y=percentage, fill=category)) +
+  geom_bar(stat="identity", position="dodge") + 
+  scale_x_discrete(limits = season) +
+  xlab("Season") + ylab("Percentage") + 
+  ggtitle("Pixel percentage of Water, Desert, and Vegetation per season") +
+  scale_fill_manual(values = c("lightblue", "orange", "darkgreen")) 
+
+################
+## ANALYSIS 3 ##
+################
+##               Temporal analysis of the june 2022 and september 2022 images
+##               B2, B3, B4 bands, with images obtained through NASA website
+##               to study differences due to the flood in a short distance time
+##               Methods: PCA, PC1 variability, PC1 differences, NDVI modified,
+##               temporal differences and densities
+
+### 1 - NASA IMAGE IMPORT ###
+
 par(mfrow=c(1,1))
-# Import image
-sept_2022_NASA <- rast("manchar_oli_2022248_lrg.jpg")
-june_2022_NASA <- rast("manchar_oli2_2022176_lrg.jpg")
+sept_2022_NASA <- rast("JuneSept2022NASA/manchar_oli_2022248_lrg.jpg")
+june_2022_NASA <- rast("JuneSept2022NASA/manchar_oli2_2022176_lrg.jpg")
 plotRGB(june_2022_NASA, r = 1, g = 2, b = 3)
 plotRGB(sept_2022_NASA, r = 1, g = 2, b = 3)
 # Non ho la banda infrared
 
-# Compute PCA and study its sd
+### 2 - PCA ###
+
 # Perform PCA
 pc <-  im.pca(sept_2022_NASA)
 pc1 <- pc[[1]]
 plot(pc1, col=cl_vir)
 title('pc1 september')
+
+### 3 - VARIABILITY ###
 
 # sd on pc1
 pc1sd3 <- focal(pc1, matrix(1/9,3,3), fun=sd) # 3x3 moving window
@@ -245,8 +351,8 @@ plot(pc1sd3, col=cl_vir)
 pc1sd7 <- focal(pc1, matrix(1/49, 7, 7), fun=sd) # 7x7 moving window -> smoother
 plot(pc1sd7, col=cl_vir)
 
-# sd on B3 a september
-# Analizzo B3 perchè è la migliore per analizzare acqua un po' verde
+# sd on B3 in september
+# B3 is the best no analyse green waters like Manchar lake
 B3 <- sept_2022_NASA[[2]]
 sd3 <- focal(B3, matrix(1/9, 3, 3), fun=sd)
 sd7 <- focal(B3, matrix(1/49, 7, 7), fun=sd)
@@ -259,6 +365,8 @@ plot(sdstack, col=cl_vir)
 # the difference between principal component and NIR is not relevant
 # indeed PC1 and NRI could be very correlated, due to the fact that
 # the image is defined principally by vegetation and water
+
+### 4 - PCA DIFFERENCES ###
 
 # Compute PCA for june
 pc_june <-  im.pca(june_2022_NASA)
@@ -276,6 +384,8 @@ plot(pca_diff,
 std_dev_pca_diff <- focal(pca_diff, w = matrix(1, 3, 3), fun = sd)
 plot(std_dev_pca_diff, col=cl_vir)
 
+### 5 - BANDS DIFFERENCES ###
+
 # bands difference
 diff_B2 <- sept_2022_NASA[[1]] - june_2022_NASA[[1]]
 diff_B3 <- sept_2022_NASA[[2]] - june_2022_NASA[[2]]
@@ -291,6 +401,8 @@ plot(diff_B4,
      main = "Differenza Rosso difference(soil and sediments)",
      col=cl_vir)
 
+### 6 - NDVI MODIFIED ###
+
 # NDVI modified
 ndvi_mod_june <- (june_2022_NASA[[2]]-june_2022_NASA[[3]])/(june_2022_NASA[[2]]+june_2022_NASA[[3]])
 plot(ndvi_mod_june, col=cl_vir)
@@ -299,12 +411,15 @@ plot(ndvi_mod_sept,col=cl_vir)
 diff_ndvi_mod <- ndvi_mod_sept - ndvi_mod_june
 plot(diff_ndvi_mod, col=cl_vir)
 
+### 7 - TEMPORAL DIFFERENCE ###
+
 # Temporal difference
 par(mfrow=c(1,1))
 diff <- june_2022_NASA[[1]] - sept_2022_NASA[[1]]
 plot(diff, col=cl_vir) 
 # the majour differences are in the part with extra water
 
+### 6 - DENSITY ###
 names(june_2022_NASA) <- c("B2 - Blue band","B3 - Green band","B4 - Red band") 
 density(june_2022_NASA)
 names(sept_2022_NASA) <- c("B2 - Blue band","B3 - Green band","B4 - Red band") 
