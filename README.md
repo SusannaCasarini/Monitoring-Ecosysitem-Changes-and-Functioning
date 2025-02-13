@@ -1,8 +1,6 @@
-# Spatial_Ecology_R
-This repo is going to collect the whole code of the Spatial Ecology course
+# Monitoring Ecosysitem Changes and Functioning
+This repo is going to collect the whole code of the Monitoring Ecosysitem Changes and Functioning course
 University of Bologna
-
-> Additional lectures are coming out in the morning
 
 ## Language used
 The whole course will be based on R
