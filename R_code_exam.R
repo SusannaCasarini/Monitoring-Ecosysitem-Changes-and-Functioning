@@ -7,7 +7,6 @@ library(terra)
 library(imageRy)
 library(ggplot2)
 library(viridis)
-library(raster)
 setwd("C:/Suz/Università/Data science/Monitoring Ecosysitems Changing and Functioning/Esame")
 
 ################
@@ -25,7 +24,6 @@ setwd("C:/Suz/Università/Data science/Monitoring Ecosysitems Changing and Funct
 # Importing data: 18/09/2021
 extent_crop <- ext(277785+50000, 508215-100000, 2757585+128000, 2992215-20000) 
 
-# bande: blu, verde, rosso, infrarosso
 b5_2021 <- rast("LC08_L2SP_152042_20210918_20210925_02_T1/LC08_L2SP_152042_20210918_20210925_02_T1_SR_B5.TIF") # infrarosso
 ext(b5_2021)
 b5_2021 <- crop(b5_2021, extent_crop)
